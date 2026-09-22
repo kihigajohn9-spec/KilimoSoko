@@ -2,16 +2,18 @@ from fastapi import FastAPI
 from app.core.config import settings
 from app.core.data_base import engine, Base
 from app.models import User, Farmer, Buyer, Product, Order
-
+from app.api.authetication import router as auth_router
 # Create the database tables
 Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI(
     title=settings.APP_NAME,
-    description="Digital platform which connects famers to buyers",
+    description="Digital platform which connects famers and buyers",
     version="1.0.0",
 )
+
+app.include_router(auth_router)
 
 @app.get("/")
 def root():
