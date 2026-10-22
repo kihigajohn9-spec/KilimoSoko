@@ -32,6 +32,12 @@ def register(
     user_data: RegisterRequest,
     db: Session = Depends(get_db)
 ):
+    if user_data.role not in {"farmer", "buyer"}:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please choose either farmer or buyer"
+        )
+
     if existing_email := db.query(User).filter(
         User.email == user_data.email
     ).first():
